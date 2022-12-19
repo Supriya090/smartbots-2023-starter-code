@@ -14,11 +14,25 @@ def get_bid(body):
     MIN_BID = 16
     PASS_BID = 0
 
+    # print(body)
+
     # when you are the first player to bid, use the minimum bid
     if len(body["bidHistory"]) == 0:
         return {"bid": MIN_BID}
 
-    return {"bid": PASS_BID}
+    # when you have two or more J or 9, go to a higher bid
+    # if the bid is already 18, pass
+    my_cards = body["cards"]
+    strong_cards = [idx for idx in my_cards if idx[0].lower() == ('j' or '9')]
+    last_bid = body["bidHistory"][-1][1]
+    defender_bid = body["bidState"]['defenderBid']
+    if(last_bid == 0):
+        last_bid = defender_bid
+    print(strong_cards)
+    if len(strong_cards) > 2 and last_bid < 18:
+        return {"bid": last_bid+1}
+    else:
+        return {"bid": PASS_BID}
 
 
 def get_trump_suit(body):
