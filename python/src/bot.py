@@ -2,19 +2,8 @@ from utils import get_suit, get_suit_cards, get_partner_idx, pick_winning_card_i
 
 
 def get_bid(body):
-    """
-    Please note: this is bare implementation of the bid function.
-    Do make changes to this function to throw valid bid according to the context of the game.
-    """
-
-    ####################################
-    #     Input your code here.        #
-    ####################################
-
     MIN_BID = 16
     PASS_BID = 0
-
-    # print(body)
 
     # when you are the first player to bid, use the minimum bid
     if len(body["bidHistory"]) == 0:
@@ -34,22 +23,26 @@ def get_bid(body):
     else:
         return {"bid": PASS_BID}
 
+    # if last_bid < 20:
+    #     return{"bid": last_bid + 1}
+    # else:
+    #     return{"bid": PASS_BID}
 
 def get_trump_suit(body):
-    """
-    Please note: this is bare implementation of the chooseTrump function.
-    Do make changes to this function to throw valid card according to the context of the game.
-    """
 
-    ####################################
-    #     Input your code here.        #
-    ####################################
-
+    # get the suit with the highest count
     own_cards = body["cards"]
-    last_card = own_cards[-1]
-    last_card_suit = get_suit(last_card)
+    own_card_suits = []
+    for card in own_cards:
+        own_card_suits.append(get_suit(card))
 
-    return {"suit": last_card_suit}
+    possible_suits = {'H':0, 'S':0, 'C':0, 'D':0}
+    for suit in own_card_suits:
+        possible_suits[suit] += 1
+    
+    print(possible_suits)
+    trump_suit = max(possible_suits, key=possible_suits.get)
+    return {"suit": trump_suit}
 
 
 def get_play_card(body):
