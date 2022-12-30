@@ -18,16 +18,16 @@ def get_bid(body):
     if(last_bid == 0):
         last_bid = defender_bid
     print(strong_cards)
-    # if len(strong_cards) > 2 and last_bid < 18:
-    #     return {"bid": last_bid+1}
-    # else:
-    #     return {"bid": PASS_BID}
+    if len(strong_cards) > 2 and last_bid < 19:
+        return {"bid": last_bid+1}
+    else:
+        return {"bid": PASS_BID}
 
     # For choose_trump_suit testing purposes
-    if last_bid < 20:
-        return{"bid": last_bid + 1}
-    else:
-        return{"bid": PASS_BID}
+    # if last_bid < 20:
+    #     return{"bid": last_bid + 1}
+    # else:
+    #     return{"bid": PASS_BID}
 
 def get_trump_suit(body):
 
@@ -116,6 +116,9 @@ def get_play_card(body):
     # we don't have any trump suit cards, throw random
     own_trump_suit_cards = get_suit_cards(own_cards, trump_suit)
     if (len(own_trump_suit_cards) == 0):
+        for card in own_cards:
+            if CARDS_DICT[card[0]]["points"] == 0:
+                return {"card": card}
         return {"card": own_cards[-1]}
 
     did_reveal_the_trump_in_this_hand = trump_revealed and trump_revealed["playerId"] == own_id and trump_revealed["hand"] == (
