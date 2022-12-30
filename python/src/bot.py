@@ -23,6 +23,7 @@ def get_bid(body):
     else:
         return {"bid": PASS_BID}
 
+    # For choose_trump_suit testing purposes
     # if last_bid < 20:
     #     return{"bid": last_bid + 1}
     # else:
