@@ -5,20 +5,26 @@ def get_bid(body):
     MIN_BID = 16
     PASS_BID = 0
 
+    own_cards = body["cards"]
+
+    # Considering J and 9 as strong cards
+    strong_cards = [idx for idx in own_cards if (idx[0] == 'J') or (idx[0] == '9')]
+    print("\n\nStrong cards", strong_cards)
+
     # when you are the first player to bid, use the minimum bid
     if len(body["bidHistory"]) == 0:
         return {"bid": MIN_BID}
 
-    # when you have two or more J or 9, go to a higher bid
-    # if the bid is already 18, pass
-    own_cards = body["cards"]
-    strong_cards = [idx for idx in own_cards if idx[0] == ('J' or '9')]
+    # Determining the last bid?
     last_bid = body["bidHistory"][-1][1]
     defender_bid = body["bidState"]['defenderBid']
     if(last_bid == 0):
         last_bid = defender_bid
-    print(strong_cards)
-    if len(strong_cards) > 2 and last_bid < 19:
+    print("\n\n Last Bid", last_bid)
+
+    # when you have two or more J or 9, go to a higher bid
+    # if the bid is already 18, pass
+    if len(strong_cards) > 1 and last_bid < 19:
         return {"bid": last_bid+1}
     else:
         return {"bid": PASS_BID}
